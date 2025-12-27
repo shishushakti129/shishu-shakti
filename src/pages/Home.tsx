@@ -61,10 +61,10 @@ export const Home: React.FC = () => {
               </svg>
             </div>
             <h2 className="text-2xl sm:text-3xl font-semibold text-neutral mb-4">
-              Affirmations
+              Gentle Truths
             </h2>
             <p className="text-neutral opacity-70 text-base sm:text-lg leading-relaxed">
-              Mood-aware affirmations to support you through every moment
+              Mood-aware truths to support you through every moment
                 </p>
               </div>
                 </Link>

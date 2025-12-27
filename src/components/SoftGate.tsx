@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 
 interface SoftGateProps {
@@ -67,12 +68,15 @@ export const SoftGate: React.FC<SoftGateProps> = ({
             {message}
           </p>
           
-          <button
+          <motion.button
             onClick={handleContinue}
             className="btn-gentle btn-primary w-full sm:w-auto"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ duration: 0.2 }}
           >
             Continue with Google
-          </button>
+          </motion.button>
         </div>
       </div>
     </div>

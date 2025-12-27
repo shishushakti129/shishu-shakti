@@ -58,9 +58,6 @@ export const Login: React.FC = () => {
                 onClick={handleSignIn}
                 disabled={loading}
                 className="btn-gentle  w-full"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.6 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >

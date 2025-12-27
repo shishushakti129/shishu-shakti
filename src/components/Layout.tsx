@@ -55,7 +55,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                   to="/affirmations"
                   className={`btn btn-ghost ${isActive('/affirmations') ? 'btn-active' : ''}`}
                 >
-                  Affirmations
+                  Gentle Truths
                 </Link>
               </motion.div>
               <motion.div
@@ -300,7 +300,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 />
               </svg>
             </span>
-            <span className="text-xs">Affirmations</span>
+            <span className="text-xs">Gentle Truths</span>
           </Link>
           <Link
             to="/blogs"
