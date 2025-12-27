@@ -79,7 +79,7 @@ export const BlogList: React.FC = () => {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="absolute inset-0 z-10"
+                            className="absolute inset-0 z-0"
                           >
                             <div className="w-full h-full skeleton-gentle" />
                           </motion.div>

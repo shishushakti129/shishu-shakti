@@ -270,10 +270,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
       {/* Mobile Navigation */}
       <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-base-100 border-t border-base-300 z-10">
-        <div className="flex justify-around py-2">
+        <div className="grid grid-cols-3 py-2">
           <Link
             to="/affirmations"
-            className={`flex flex-col items-center px-4 py-2 rounded-lg transition-all ${
+            className={`flex flex-col items-center justify-center px-2 py-2 rounded-lg transition-all ${
               isActive('/affirmations')
                 ? 'bg-primary/10 text-primary font-semibold shadow-[0_4px_20px_0_rgba(99,102,241,0.10)]'
                 : 'text-neutral opacity-80 hover:text-primary'
@@ -303,7 +303,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           </Link>
           <Link
             to="/blogs"
-            className={`flex flex-col items-center px-4 py-2 rounded-lg transition-all ${
+            className={`flex flex-col items-center justify-center px-2 py-2 rounded-lg transition-all ${
               isActive('/blogs')
                 ? 'bg-secondary/10 text-secondary font-semibold shadow-[0_4px_20px_0_rgba(34,197,94,0.10)]'
                 : 'text-neutral opacity-80 hover:text-secondary'
@@ -333,7 +333,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           </Link>
           <Link
             to="/letters"
-            className={`flex flex-col items-center px-4 py-2 rounded-lg transition-all ${
+            className={`flex flex-col items-center justify-center px-2 py-2 rounded-lg transition-all ${
               isActive('/letters')
                 ? 'bg-accent/10 text-accent font-semibold shadow-[0_4px_20px_0_rgba(236,72,153,0.10)]'
                 : 'text-neutral opacity-80 hover:text-accent'
