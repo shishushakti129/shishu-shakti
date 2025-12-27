@@ -20,10 +20,14 @@ export const SoftGate: React.FC<SoftGateProps> = ({
 }) => {
   const { signIn, user } = useAuth();
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (!user) {
-      signIn();
-      if (onUnlock) onUnlock();
+      try {
+        await signIn();
+        if (onUnlock) onUnlock();
+      } catch (error) {
+        console.error('Sign in error:', error);
+      }
     } else if (onUnlock) {
       onUnlock();
     }

@@ -1,35 +1,54 @@
+import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { db } from '../config/firebase';
 import type { Mood } from '../types';
 
-// Simplified Affirmation type for Phase-1 (using imageSrc instead of imageUrl)
+// Affirmation type matching Firebase structure
 export interface AffirmationData {
   id: string;
   mood: Mood;
-  imageSrc: string;
+  imageSrc: string; // Maps to imageUrl from Firebase
 }
 
 /**
- * Returns affirmation data for a given mood.
- * Phase-1: Only 'overwhelmed' and 'tired' are unlocked with 5 placeholder images each.
- * All other moods return 'LOCKED'.
+ * Fetches affirmation data for a given mood from Firebase.
+ * Note: Lock checking is now done by the caller based on mood.isFree from Firebase.
+ * This function always attempts to fetch affirmations if called.
  */
-export function getAffirmationsForMood(
-  mood: Mood
-): AffirmationData[] | 'LOCKED' {
-  // Unlocked moods: overwhelmed and tired
-  if (mood === 'overwhelmed' || mood === 'tired') {
-    // Return 5 placeholder images (600x800)
-    const affirmations: AffirmationData[] = [];
-    for (let i = 0; i < 5; i++) {
-      affirmations.push({
-        id: `placeholder-${mood}-${i}`,
-        mood,
-        imageSrc: `https://picsum.photos/600/800?random=${mood}-${i}`,
-      });
+export async function getAffirmationsForMood(
+  mood: string
+): Promise<AffirmationData[] | 'LOCKED'> {
+  try {
+    // Fetch affirmations from Firebase
+    const affirmationsRef = collection(db, 'affirmations');
+    const q = query(
+      affirmationsRef,
+      where('mood', '==', mood),
+      orderBy('createdAt', 'asc')
+    );
+    
+    const querySnapshot = await getDocs(q);
+    
+    if (querySnapshot.empty) {
+      // If no affirmations found, return empty array
+      return [];
     }
-    return affirmations;
-  }
 
-  // All other moods are locked
-  return 'LOCKED';
+    // Map Firebase documents to AffirmationData
+    const affirmations: AffirmationData[] = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      affirmations.push({
+        id: doc.id,
+        mood: data.mood as Mood,
+        imageSrc: data.imageUrl || '', // Map imageUrl to imageSrc
+      });
+    });
+
+    return affirmations;
+  } catch (error) {
+    console.error('Error fetching affirmations:', error);
+    // Return empty array on error
+    return [];
+  }
 }
 

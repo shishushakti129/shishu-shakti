@@ -16,14 +16,15 @@ export const Login: React.FC = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  const handleSignIn = () => {
-    setLoading(true);
-    // Simulate async sign-in
-    setTimeout(() => {
-      signIn();
-      setLoading(false);
+  const handleSignIn = async () => {
+    try {
+      setLoading(true);
+      await signIn();
       navigate('/');
-    }, 300);
+    } catch (error) {
+      console.error('Sign in error:', error);
+      setLoading(false);
+    }
   };
 
   return (

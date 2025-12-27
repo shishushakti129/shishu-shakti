@@ -163,106 +163,107 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               </Link>
             )}
             </div>
-            {user ? (
-              <div className="sm:hidden dropdown dropdown-end">
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className="btn btn-ghost btn-sm"
+            <div className="sm:hidden flex items-center gap-2">
+              {/* Mobile Theme Switcher - Always visible */}
+              <div className="relative">
+                <motion.button
+                  onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
+                  className="btn btn-ghost btn-circle btn-sm"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  aria-label="Theme switcher"
                 >
-                  {user.name}
-                </div>
-                <ul
-                  tabIndex={0}
-                  className="dropdown-content menu bg-base-100 rounded-box z-[1] mt-3 w-40 p-2 shadow-lg border border-base-300"
-                >
-                  <li>
-                    <button onClick={signOut} className="text-error">
-                      Sign Out
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            ) : (
-              <div className="sm:hidden flex items-center gap-2">
-                {/* Mobile Theme Switcher */}
-                <div className="relative">
-                  <motion.button
-                    onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
-                    className="btn btn-ghost btn-circle btn-sm"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    aria-label="Theme switcher"
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+                    />
+                  </svg>
+                </motion.button>
+
+                {/* Theme Options Menu */}
+                <AnimatePresence>
+                  {isThemeMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-12 right-0 w-40 bg-base-100 rounded-2xl shadow-xl border border-base-300 overflow-hidden z-50"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
-                      />
-                    </svg>
-                  </motion.button>
+                      <div className="p-2">
+                        {themes.map((themeOption) => (
+                          <button
+                            key={themeOption}
+                            onClick={() => handleThemeSelect(themeOption)}
+                            className={`
+                              w-full flex items-center justify-between px-4 py-3 rounded-lg
+                              transition-colors duration-200
+                              ${
+                                theme === themeOption
+                                  ? 'bg-primary text-primary-content'
+                                  : 'hover:bg-base-200 text-neutral'
+                              }
+                            `}
+                          >
+                            <span className="capitalize font-medium">{themeOption}</span>
+                            {theme === themeOption && (
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
 
-                  {/* Theme Options Menu */}
-                  <AnimatePresence>
-                    {isThemeMenuOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
-                        className="absolute top-12 right-0 w-40 bg-base-100 rounded-2xl shadow-xl border border-base-300 overflow-hidden z-50"
-                      >
-                        <div className="p-2">
-                          {themes.map((themeOption) => (
-                            <button
-                              key={themeOption}
-                              onClick={() => handleThemeSelect(themeOption)}
-                              className={`
-                                w-full flex items-center justify-between px-4 py-3 rounded-lg
-                                transition-colors duration-200
-                                ${
-                                  theme === themeOption
-                                    ? 'bg-primary text-primary-content'
-                                    : 'hover:bg-base-200 text-neutral'
-                                }
-                              `}
-                            >
-                              <span className="capitalize font-medium">{themeOption}</span>
-                              {theme === themeOption && (
-                                <svg
-                                  className="w-5 h-5"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M5 13l4 4L19 7"
-                                  />
-                                </svg>
-                              )}
-                            </button>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+              {/* User/Sign In for Mobile */}
+              {user ? (
+                <div className="dropdown dropdown-end">
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    className="btn btn-ghost btn-sm"
+                  >
+                    {user.name}
+                  </div>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content menu bg-base-100 rounded-box z-[1] mt-3 w-40 p-2 shadow-lg border border-base-300"
+                  >
+                    <li>
+                      <button onClick={signOut} className="text-error">
+                        Sign Out
+                      </button>
+                    </li>
+                  </ul>
                 </div>
-
+              ) : (
                 <Link to="/login">
                   <span className="btn btn-secondary btn-sm">Sign In</span>
                 </Link>
-              </div>
-            )}
+              )}
+            </div>
           </div>
             
         </div>
