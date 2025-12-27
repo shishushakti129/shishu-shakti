@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, getDocs, orderBy } from 'firebase/firestore';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { db } from '../config/firebase';
 import type { Blog } from '../types';
 import { useAuth } from '../contexts/AuthContext';
@@ -13,7 +13,7 @@ export const Blogs: React.FC = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
-  const { user, incrementUsage } = useAuth();
+  const { user } = useAuth();
   const { canView, remaining } = useBlogLimit();
   const [viewedBlogs, setViewedBlogs] = useState<Set<string>>(new Set());
 
@@ -52,9 +52,7 @@ export const Blogs: React.FC = () => {
     }
 
     if (!viewedBlogs.has(blog.id)) {
-      if (user) {
-        await incrementUsage('blogViews');
-      } else {
+      if (!user) {
         incrementGuestView('blogViews');
       }
       setViewedBlogs((prev) => new Set([...prev, blog.id]));

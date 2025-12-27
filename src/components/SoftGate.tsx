@@ -18,16 +18,12 @@ export const SoftGate: React.FC<SoftGateProps> = ({
   onUnlock,
   message = "Create a gentle space for yourself to continue.",
 }) => {
-  const { signInWithGoogle, user } = useAuth();
+  const { signIn, user } = useAuth();
 
-  const handleContinue = async () => {
+  const handleContinue = () => {
     if (!user) {
-      try {
-        await signInWithGoogle();
-        if (onUnlock) onUnlock();
-      } catch (error) {
-        console.error('Sign in error:', error);
-      }
+      signIn();
+      if (onUnlock) onUnlock();
     } else if (onUnlock) {
       onUnlock();
     }
