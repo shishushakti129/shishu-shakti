@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { mockLetters } from '../data/mockLetters';
 import { useAuth } from '../contexts/AuthContext';
+import { getAllLetters } from '../utils/getLetters';
+import type { Letter } from '../utils/getLetters';
 import { AnimatedPage, StaggerContainer, StaggerItem, FadeIn } from '../components/AnimatedPage';
 import { SignInModal } from '../components/SignInModal';
 
@@ -10,6 +11,24 @@ export const Letters: React.FC = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [showSignInModal, setShowSignInModal] = useState(false);
+  const [letters, setLetters] = useState<Letter[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLetters = async () => {
+      setLoading(true);
+      try {
+        const fetchedLetters = await getAllLetters(isAuthenticated);
+        setLetters(fetchedLetters);
+      } catch (error) {
+        console.error('Error fetching letters:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLetters();
+  }, [isAuthenticated]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -20,7 +39,7 @@ export const Letters: React.FC = () => {
     });
   };
 
-  const handleLetterClick = (letter: typeof mockLetters[0], e: React.MouseEvent) => {
+  const handleLetterClick = (letter: Letter, e: React.MouseEvent) => {
     // If letter is free, allow navigation
     if (letter.isFree) {
       navigate(`/letters/${letter.id}`);
@@ -55,9 +74,19 @@ export const Letters: React.FC = () => {
           </FadeIn>
 
           {/* Letters List */}
-          <StaggerContainer delay={0.1}>
-            <div className="space-y-6">
-              {mockLetters.map((letter) => (
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-12">
+              <span className="loading loading-spinner loading-lg mb-4"></span>
+              <p className="text-neutral opacity-70">Loading letters...</p>
+            </div>
+          ) : letters.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-neutral opacity-70 text-lg">No letters available yet.</p>
+            </div>
+          ) : (
+            <StaggerContainer delay={0.1}>
+              <div className="space-y-6">
+                {letters.map((letter) => (
                 <StaggerItem key={letter.id}>
                   <motion.div
                     className="card-gentle p-6 sm:p-8 cursor-pointer relative"
@@ -105,9 +134,10 @@ export const Letters: React.FC = () => {
                     </p>
                   </motion.div>
                 </StaggerItem>
-              ))}
-            </div>
-          </StaggerContainer>
+                ))}
+              </div>
+            </StaggerContainer>
+          )}
 
           {/* Sign In Modal */}
           <SignInModal

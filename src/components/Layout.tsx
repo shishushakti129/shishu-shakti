@@ -10,6 +10,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const { user, signOut } = useAuth();
   const { theme, changeTheme, themes } = useTheme();
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
+  const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
 
   const isActive = (path: string) => {
     // Exact match
@@ -137,31 +138,95 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 </ul>
               </div>
               
-            {user ? (
-              <div className="dropdown dropdown-end">
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className="btn btn-ghost"
+              {/* Hamburger Menu */}
+              <div className="relative">
+                <motion.button
+                  onClick={() => setIsHamburgerMenuOpen(!isHamburgerMenuOpen)}
+                  className="btn btn-ghost btn-sm"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  aria-label="Menu"
                 >
-                  {user.name}
-                </div>
-                <ul
-                  tabIndex={0}
-                  className="dropdown-content menu bg-base-100 rounded-box z-[1] mt-3 w-40 p-2 shadow-lg border border-base-300"
-                >
-                  <li>
-                    <button onClick={signOut} className="text-error">
-                      Sign Out
-                    </button>
-                  </li>
-                </ul>
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    {isHamburgerMenuOpen ? (
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    ) : (
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 6h16M4 12h16M4 18h16"
+                      />
+                    )}
+                  </svg>
+                </motion.button>
+
+                {/* Hamburger Menu Dropdown */}
+                <AnimatePresence>
+                  {isHamburgerMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-12 right-0 w-48 bg-base-100 rounded-2xl shadow-xl border border-base-300 overflow-hidden z-50"
+                    >
+                      <div className="p-2">
+                        {user ? (
+                          <>
+                            <div className="px-4 py-3 border-b border-base-300">
+                              <p className="text-sm font-semibold text-neutral">{user.name}</p>
+                            </div>
+                            <Link
+                              to="/about"
+                              onClick={() => setIsHamburgerMenuOpen(false)}
+                              className="block w-full px-4 py-3 rounded-lg hover:bg-base-200 text-neutral transition-colors duration-200"
+                            >
+                              About
+                            </Link>
+                            <button
+                              onClick={() => {
+                                signOut();
+                                setIsHamburgerMenuOpen(false);
+                              }}
+                              className="block w-full text-left px-4 py-3 rounded-lg hover:bg-base-200 text-error transition-colors duration-200 mt-2"
+                            >
+                              Sign Out
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <Link
+                              to="/about"
+                              onClick={() => setIsHamburgerMenuOpen(false)}
+                              className="block w-full px-4 py-3 rounded-lg hover:bg-base-200 text-neutral transition-colors duration-200"
+                            >
+                              About
+                            </Link>
+                            <Link
+                              to="/login"
+                              onClick={() => setIsHamburgerMenuOpen(false)}
+                              className="block w-full px-4 py-3 rounded-lg bg-secondary text-secondary-content hover:bg-secondary/90 transition-colors duration-200 text-center font-medium mt-2"
+                            >
+                              Sign In
+                            </Link>
+                          </>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-            ) : (
-              <Link to="/login">
-                <span className="btn btn-secondary btn-sm sm:btn-md">Sign In</span>
-              </Link>
-            )}
             </div>
             <div className="sm:hidden flex items-center gap-2">
               {/* Mobile Theme Switcher - Always visible */}
@@ -237,32 +302,95 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 </AnimatePresence>
               </div>
 
-              {/* User/Sign In for Mobile */}
-              {user ? (
-                <div className="dropdown dropdown-end">
-                  <div
-                    tabIndex={0}
-                    role="button"
-                    className="btn btn-ghost btn-sm"
+              {/* Hamburger Menu for Mobile */}
+              <div className="relative">
+                <motion.button
+                  onClick={() => setIsHamburgerMenuOpen(!isHamburgerMenuOpen)}
+                  className="btn btn-ghost btn-circle btn-sm"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  aria-label="Menu"
+                >
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    {user.name}
-                  </div>
-                  <ul
-                    tabIndex={0}
-                    className="dropdown-content menu bg-base-100 rounded-box z-[1] mt-3 w-40 p-2 shadow-lg border border-base-300"
-                  >
-                    <li>
-                      <button onClick={signOut} className="text-error">
-                        Sign Out
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              ) : (
-                <Link to="/login">
-                  <span className="btn btn-secondary btn-sm">Sign In</span>
-                </Link>
-              )}
+                    {isHamburgerMenuOpen ? (
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    ) : (
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 6h16M4 12h16M4 18h16"
+                      />
+                    )}
+                  </svg>
+                </motion.button>
+
+                {/* Hamburger Menu Dropdown for Mobile */}
+                <AnimatePresence>
+                  {isHamburgerMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-12 right-0 w-48 bg-base-100 rounded-2xl shadow-xl border border-base-300 overflow-hidden z-50"
+                    >
+                      <div className="p-2">
+                        {user ? (
+                          <>
+                            <div className="px-4 py-3 border-b border-base-300">
+                              <p className="text-sm font-semibold text-neutral">{user.name}</p>
+                            </div>
+                            <Link
+                              to="/about"
+                              onClick={() => setIsHamburgerMenuOpen(false)}
+                              className="block w-full px-4 py-3 rounded-lg hover:bg-base-200 text-neutral transition-colors duration-200"
+                            >
+                              About
+                            </Link>
+                            <button
+                              onClick={() => {
+                                signOut();
+                                setIsHamburgerMenuOpen(false);
+                              }}
+                              className="block w-full text-left px-4 py-3 rounded-lg hover:bg-base-200 text-error transition-colors duration-200 mt-2"
+                            >
+                              Sign Out
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <Link
+                              to="/about"
+                              onClick={() => setIsHamburgerMenuOpen(false)}
+                              className="block w-full px-4 py-3 rounded-lg hover:bg-base-200 text-neutral transition-colors duration-200"
+                            >
+                              About
+                            </Link>
+                            <Link
+                              to="/login"
+                              onClick={() => setIsHamburgerMenuOpen(false)}
+                              className="block w-full px-4 py-3 rounded-lg bg-secondary text-secondary-content hover:bg-secondary/90 transition-colors duration-200 text-center font-medium mt-2"
+                            >
+                              Sign In
+                            </Link>
+                          </>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
           </div>
             
@@ -370,15 +498,18 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         {children}
       </main>
 
-      {/* Backdrop to close theme menu when clicking outside (mobile) */}
+      {/* Backdrop to close menus when clicking outside */}
       <AnimatePresence>
-        {isThemeMenuOpen && (
+        {(isThemeMenuOpen || isHamburgerMenuOpen) && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="sm:hidden fixed inset-0 z-40"
-            onClick={() => setIsThemeMenuOpen(false)}
+            className="fixed inset-0 z-40"
+            onClick={() => {
+              setIsThemeMenuOpen(false);
+              setIsHamburgerMenuOpen(false);
+            }}
           />
         )}
       </AnimatePresence>

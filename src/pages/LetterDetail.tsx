@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { mockLetters } from '../data/mockLetters';
 import { useAuth } from '../contexts/AuthContext';
+import { getLetterById } from '../utils/getLetters';
+import type { Letter } from '../utils/getLetters';
 import { AnimatedPage, FadeIn } from '../components/AnimatedPage';
 import { SignInModal } from '../components/SignInModal';
 
@@ -10,9 +11,31 @@ export const LetterDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-  const [showSignInModal, setShowSignInModal] = React.useState(false);
+  const [showSignInModal, setShowSignInModal] = useState(false);
+  const [letter, setLetter] = useState<Letter | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const letter = mockLetters.find((l) => l.id === id);
+  // Fetch letter from Firebase
+  useEffect(() => {
+    const fetchLetter = async () => {
+      if (!id) {
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const fetchedLetter = await getLetterById(id);
+        setLetter(fetchedLetter);
+      } catch (error) {
+        console.error('Error fetching letter:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLetter();
+  }, [id]);
 
   // Check if letter is locked and user is not authenticated
   useEffect(() => {
@@ -20,6 +43,20 @@ export const LetterDetail: React.FC = () => {
       setShowSignInModal(true);
     }
   }, [letter, isAuthenticated]);
+
+  // Show loading state
+  if (loading) {
+    return (
+      <AnimatedPage>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+          <div className="max-w-3xl mx-auto flex flex-col items-center justify-center py-12">
+            <span className="loading loading-spinner loading-lg mb-4"></span>
+            <p className="text-neutral opacity-70">Loading letter...</p>
+          </div>
+        </div>
+      </AnimatedPage>
+    );
+  }
 
   // Redirect to letters list if letter not found
   if (!letter) {

@@ -8,6 +8,7 @@ import { BlogDetail } from './pages/BlogDetail';
 import { Letters } from './pages/Letters';
 import { LetterDetail } from './pages/LetterDetail';
 import { Login } from './pages/Login';
+import { About } from './pages/About';
 import { NotFound } from './pages/NotFound';
 
 function AnimatedRoutes() {
@@ -23,6 +24,7 @@ function AnimatedRoutes() {
         <Route path="/letters" element={<Letters />} />
         <Route path="/letters/:id" element={<LetterDetail />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/about" element={<About />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>

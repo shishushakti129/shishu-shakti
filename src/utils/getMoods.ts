@@ -12,6 +12,9 @@ export interface MoodData {
 
 // Emoji mapping for moods (fallback if not in Firebase)
 const emojiMap: Record<string, string> = {
+  supportive: '🤍',
+  positive: '🌱',
+  // Legacy moods (kept for backward compatibility if needed)
   overwhelmed: '🌊',
   exhausted: '😴',
   tired: '😴',

@@ -112,12 +112,12 @@ export const Affirmations: React.FC = () => {
                 <span className="loading loading-spinner loading-lg"></span>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 mb-12">
+              <div className="flex justify-center items-center gap-4 sm:gap-6 mb-12">
                 {moods.map((mood) => (
                   <button
                     key={mood.key}
                     onClick={() => handleMoodSelect(mood.key)}
-                    className="card-gentle p-6 sm:p-8 text-center w-full relative"
+                    className="card-gentle p-6 sm:p-8 text-center w-full max-w-xs relative transition-all duration-300 hover:scale-105 hover:shadow-lg hover:-translate-y-1"
                   >
                     {!mood.isFree && !isAuthenticated && (
                       <div className="absolute top-2 right-2">
@@ -136,7 +136,7 @@ export const Affirmations: React.FC = () => {
                         </svg>
                       </div>
                     )}
-                    <div className="text-4xl sm:text-5xl mb-3">
+                    <div className="text-4xl sm:text-5xl mb-3 transition-transform duration-300 hover:scale-110">
                       {mood.emoji || '💫'}
                     </div>
                     <div className="text-lg font-medium text-neutral">{mood.label}</div>
