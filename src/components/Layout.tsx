@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../hooks/useTheme';
 import logoImage from '../assets/shishu-shakti-logo.png';
+import { Footer } from './Footer';
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
@@ -497,6 +498,9 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       <main className="flex-1 pb-20 sm:pb-0">
         {children}
       </main>
+
+      {/* Footer */}
+      <Footer />
 
       {/* Backdrop to close menus when clicking outside */}
       <AnimatePresence>
