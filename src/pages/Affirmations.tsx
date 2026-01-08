@@ -99,9 +99,6 @@ export const Affirmations: React.FC = () => {
           <h1 className="text-3xl sm:text-4xl font-light text-neutral mb-4">
             How are you feeling right now?
           </h1>
-          <p className="text-neutral opacity-70 text-lg">
-            Choose a mood to see affirmations tailored for you
-          </p>
         </div>
 
         {/* Mood Selector */}

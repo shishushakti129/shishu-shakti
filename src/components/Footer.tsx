@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, useInView } from 'framer-motion';
 import logoImage from '../assets/shishu-shakti-logo.png';
 
 export const Footer: React.FC = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+
   return (
-    <footer className="w-full bg-base-100 border-t border-base-300 mt-auto pb-20 sm:pb-0">
+    <motion.footer
+      ref={ref}
+      initial={{ opacity: 0, y: 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+      className="w-full bg-base-100 border-t border-base-300 mt-auto pb-20 sm:pb-0"
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="flex flex-col items-center gap-6 sm:gap-8">
           {/* Logo */}
@@ -19,6 +29,18 @@ export const Footer: React.FC = () => {
               className="h-12 sm:h-16 lg:h-20 w-auto"
             />
           </Link>
+
+          {/* Quote Text */}
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+            className="text-sm sm:text-base text-neutral opacity-70 text-center max-w-2xl px-4 italic leading-relaxed"
+          >
+            Shishu Shakti is not here to change who you are.
+            <br className="hidden sm:block" />
+            <span className="block sm:inline"> It is here to remind you that you are already enough.</span>
+          </motion.p>
 
           {/* Social Icons */}
           <div className="flex items-center gap-4 sm:gap-6">
@@ -91,7 +113,7 @@ export const Footer: React.FC = () => {
           </p>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   );
 };
 
